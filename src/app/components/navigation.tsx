@@ -11,9 +11,7 @@ export const Navigation = () => {
             <Link href="/" className={pathname === "/" ? "font-bold mr-4" : "text-blue-500 mr-4"}>
             Home
             </Link>
-            <Link href="/about" className={pathname === "/about" ? "font-bold mr-4" : "text-blue-500 mr-4"}>
-            About
-            </Link>
+            
             <Link href="/supportus" className={pathname === "/supportus" ? "font-bold mr-4" : "text-blue-500 mr-4"}>
             Support US
             </Link>
