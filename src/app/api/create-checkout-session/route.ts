@@ -4,7 +4,7 @@ import Stripe from 'stripe';
 import { NextRequest, NextResponse } from 'next/server';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: '2022-11-15', // Adjust to your Stripe API version
+    apiVersion: '2024-10-28.acacia', // Adjust to your Stripe API version
 });
 
 
