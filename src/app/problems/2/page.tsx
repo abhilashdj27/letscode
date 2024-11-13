@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import Editor from '@monaco-editor/react';
 
-export default function Problem2Page() {
+export default function Problem1Page() {
   const [code, setCode] = useState(`
-function reverseString(str) {
+function sumOfTwoNumbers(a, b) {
   // Write your logic here
 }
 `);
@@ -13,50 +13,35 @@ function reverseString(str) {
   const [testResults, setTestResults] = useState<{ testCase: string, status: string }[]>([]);
 
   const testCases = [
-    { input: '"hello"', expected: "olleh" },
-    { input: '"world"', expected: "dlrow" },
-    { input: '"a"', expected: "a" },
-    { input: '"abc"', expected: "cba" },
+    { input: "[1, 2]", expected: "3" },
+    { input: "[10, 20]", expected: "30" },
+    { input: "[0, 0]", expected: "0" },
+    { input: "[-5, 5]", expected: "0" },
   ];
 
   const handleRunCode = () => {
-    const newTestResults = testCases.map((testCase, index) => {
+    const newTestResults = testCases.map((testCase) => {
       try {
-        // Wrap user code in a function and execute it
         const wrappedCode = `
           ${code}
-          return reverseString(${testCase.input});
+          return sumOfTwoNumbers(...JSON.parse(${JSON.stringify(testCase.input)}));
         `;
+        const func = new Function('sumOfTwoNumbers', wrappedCode);
 
-        // Create a new function from the user's code and run it, passing reverseString as a parameter
-        const func = new Function('reverseString', wrappedCode);
-
-        // Execute the function and capture the result
-        const actualOutput = func(function reverseString(str: string): string {
-          // Default logic, to avoid errors if the user hasn't written any logic
-          return str.split('').reverse().join('');
+        const actualOutput = func(function sumOfTwoNumbers(a: number, b: number): number {
+          return a + b;
         });
 
-        // Compare the actual output with the expected output
-        const status = actualOutput === testCase.expected
+        const status = actualOutput === parseInt(testCase.expected)
           ? "Test Passed"
           : `Test Failed: Expected "${testCase.expected}", but got "${actualOutput}"`;
 
-        return {
-          testCase: testCase.input,
-          status
-        };
+        return { testCase: testCase.input, status };
       } catch (err: unknown) {
         if (err instanceof Error) {
-          return {
-            testCase: testCase.input,
-            status: `Error: ${err.message}`
-          };
+          return { testCase: testCase.input, status: `Error: ${err.message}` };
         } else {
-          return {
-            testCase: testCase.input,
-            status: "Unknown Error"
-          };
+          return { testCase: testCase.input, status: "Unknown Error" };
         }
       }
     });
@@ -67,12 +52,12 @@ function reverseString(str) {
   return (
     <div className="flex min-h-screen p-8 bg-gray-100">
       <div className="w-1/2 pr-4 text-black">
-        <h2 className="text-2xl font-bold mb-4">Problem 2: Reverse a String</h2>
-        <p>Write a function that takes a string and returns it reversed.</p>
+        <h2 className="text-2xl font-bold mb-4">Problem 1: Sum of Two Numbers</h2>
+        <p>Write a function that returns the sum of two numbers.</p>
         <p><strong>Example:</strong></p>
         <pre className="bg-gray-200 p-2 rounded mb-4">
-          Input: "hello"
-          Output: "olleh"
+          Input: [1, 2]
+          Output: 3
         </pre>
       </div>
       <div className="w-1/2 pl-4">
@@ -81,9 +66,9 @@ function reverseString(str) {
         <div className="mt-4">
           {testResults.length > 0 && (
             <div>
-              {testResults.map((testResult, index) => (
-                <div key={index} className={`mt-2 p-2 rounded ${testResult.status === "Test Passed" ? "bg-green-100" : "bg-red-100"} text-black`}>
-                  <strong>Test {index + 1} (Input: {testResult.testCase}):</strong> {testResult.status}
+              {testResults.map((testResult) => (
+                <div key={testResult.testCase} className={`mt-2 p-2 rounded ${testResult.status === "Test Passed" ? "bg-green-100" : "bg-red-100"} text-black`}>
+                  <strong>Test (Input: {testResult.testCase}):</strong> {testResult.status}
                 </div>
               ))}
             </div>

@@ -20,7 +20,7 @@ function findMax(arr) {
   ];
 
   const handleRunCode = () => {
-    const newTestResults = testCases.map((testCase, index) => {
+    const newTestResults = testCases.map((testCase) => {
       try {
         const wrappedCode = `
           ${code}

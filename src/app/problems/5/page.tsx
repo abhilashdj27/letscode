@@ -5,7 +5,7 @@ import Editor from '@monaco-editor/react';
 
 export default function Problem5Page() {
   const [code, setCode] = useState(`
-function fibonacci(n) {
+function fibonacci(n: number): number[] {
    // Write your logic here
 }
 `);
@@ -20,20 +20,15 @@ function fibonacci(n) {
   ];
 
   const handleRunCode = () => {
-    const newTestResults = testCases.map((testCase, index) => {
+    const newTestResults = testCases.map((testCase) => {
       try {
-        // Wrap user code in a function and execute it
         const wrappedCode = `
           ${code}
           return fibonacci(${testCase.input});
         `;
-
-        // Create a new function from the user's code and run it
         const func = new Function('fibonacci', wrappedCode);
 
-        // Execute the function and capture the result
-        const actualOutput = func(function fibonacci(n) {
-          // Default logic, to avoid errors if the user hasn't written any logic
+        const actualOutput = func(function fibonacci(n: number): number[] {
           if (n <= 0) return [];
           if (n === 1) return [0];
           const fibSeq = [0, 1];
@@ -43,7 +38,6 @@ function fibonacci(n) {
           return fibSeq;
         });
 
-        // Format the expected and actual output as strings
         const formattedExpected = testCase.expected.replace(/\s/g, '');
         const formattedActual = JSON.stringify(actualOutput).replace(/\s/g, '');
 
@@ -52,20 +46,20 @@ function fibonacci(n) {
           : `Test Failed: Expected "${formattedExpected}", but got "${formattedActual}"`;
 
         return {
-          testCase: String(testCase.input),  // Convert testCase input to a string
+          testCase: String(testCase.input),
           status,
-          output: JSON.stringify(actualOutput)  // Add the actual output to the result
+          output: JSON.stringify(actualOutput)
         };
       } catch (err: unknown) {
         if (err instanceof Error) {
           return {
-            testCase: String(testCase.input),  // Convert testCase input to a string
+            testCase: String(testCase.input),
             status: `Error: ${err.message}`,
-            output: err.message  // Add the error message as output
+            output: err.message
           };
         } else {
           return {
-            testCase: String(testCase.input),  // Convert testCase input to a string
+            testCase: String(testCase.input),
             status: "Unknown Error",
             output: "Unknown Error"
           };
@@ -80,7 +74,7 @@ function fibonacci(n) {
     <div className="flex min-h-screen p-8 bg-gray-100">
       <div className="w-1/2 pr-4 text-black">
         <h2 className="text-2xl font-bold mb-4">Problem 5: Fibonacci Sequence</h2>
-        <p>Write a function that takes a number n and returns the Fibonacci sequence up to the nth number.</p>
+        <p>Write a function that returns the first `n` numbers in the Fibonacci sequence.</p>
         <p><strong>Example:</strong></p>
         <pre className="bg-gray-200 p-2 rounded mb-4">
           Input: 5
@@ -96,9 +90,7 @@ function fibonacci(n) {
               {testResults.map((testResult, index) => (
                 <div key={index} className={`mt-2 p-2 rounded ${testResult.status === "Test Passed" ? "bg-green-100" : "bg-red-100"} text-black`}>
                   <strong>Test {index + 1} (Input: {testResult.testCase}):</strong> {testResult.status}
-                  <div className="mt-2">
-                    <strong>Output:</strong> {testResult.output}  {/* Display the actual output */}
-                  </div>
+                  <pre className="bg-gray-200 p-2 rounded mt-2">{testResult.output}</pre>
                 </div>
               ))}
             </div>

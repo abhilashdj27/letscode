@@ -21,7 +21,7 @@ function sumOfTwoNumbers(a, b) {
   ];
 
   const handleRunCode = () => {
-    const newTestResults = testCases.map((testCase, index) => {
+    const newTestResults = testCases.map((testCase) => {
       try {
         const wrappedCode = `
           ${code}
@@ -67,9 +67,9 @@ function sumOfTwoNumbers(a, b) {
         <div className="mt-4">
           {testResults.length > 0 && (
             <div>
-              {testResults.map((testResult, index) => (
-                <div key={index} className={`mt-2 p-2 rounded ${testResult.status === "Test Passed" ? "bg-green-100" : "bg-red-100"} text-black`}>
-                  <strong>Test {index + 1} (Input: {testResult.testCase}):</strong> {testResult.status}
+              {testResults.map((testResult) => (
+                <div key={testResult.testCase} className={`mt-2 p-2 rounded ${testResult.status === "Test Passed" ? "bg-green-100" : "bg-red-100"} text-black`}>
+                  <strong>Test (Input: {testResult.testCase}):</strong> {testResult.status}
                 </div>
               ))}
             </div>
